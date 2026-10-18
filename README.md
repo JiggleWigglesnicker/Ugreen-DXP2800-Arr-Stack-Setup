@@ -290,7 +290,7 @@ To ensure SABnzbd and Gluetun are properly protected through your VPN:
    ```
    *(The IP inside Gluetun must differ from your host NAS IP address).*
 
-3. Access container shell for maintenance if needed:
+3. Check the external IP assigned inside the Sabnzbd container:
    ```bash
    sudo docker exec -it sabnzbd /bin/bash
    wget -qO - icanhazip.com
