@@ -6,6 +6,8 @@ I highly recommend watching his video on how to set up the Arr stack on a Ugreen
 In this guide, I have made a few minor alterations for myself, such as using WireGuard instead of OpenVPN because it's faster, at least for me. 
 The Jellyfin section is something I troubleshot myself in order to get QuickSync working in Docker on the NAS.
 
+If you want to know how to set up the Arr stack in greater detail, I would recommend consulting this guide. - [Trash Guides](https://trash-guides.info/)
+
 ## Step 1: Storage Setup & Folder Structure
 
 ### Folder Types in UGOS Pro
@@ -225,6 +227,16 @@ services:
       - "44"    # Video group ID for full iGPU access
     restart: unless-stopped
 ```
+## Understanding Container Path Mapping (`/data`)
+
+In the `docker-compose.yaml` file, the host's `arr-stack-data` folder (`${DOCKERSTORAGEDIR}`) is mapped directly inside the containers under the root path `/data`. This unified internal path structure is essential for the Arr stack:   
+
+* **Radarr & Sonarr** mount the entire shared folder as `${DOCKERSTORAGEDIR}:/data`, giving them unified access to both downloads and media libraries.   
+* **Jellyfin & Bazarr** mount the media directory as `${DOCKERSTORAGEDIR}/media:/data/media` to read your video libraries and subtitles.   
+* **SABnzbd** mounts the usenet directory as `${DOCKERSTORAGEDIR}/usenet:/data/usenet` for handling incoming downloads.   
+
+## Why This Matters
+By mapping everything under a shared `/data` path inside the containers, Radarr and Sonarr can perform **atomic hardlinks and instant moves** when importing completed downloads. Instead of slowly copying large video files across different drives or folder paths, the NAS instantly links them, saving massive amounts of disk I/O and time.
 
 ---
 
