@@ -1,5 +1,6 @@
 # Ugreen NAS (DXP2800) Arr Stack Setup Guide
 ---
+
 This guide covers setting up a fully containerized Arr stack with a secure WireGuard VPN connection via Gluetun on a Ugreen NAS running UGOS Pro.
 The steps in this guide are based on a YouTube video by Digital Aloha (watch it here). 
 I highly recommend watching his video on how to set up the Arr stack on a Ugreen NAS, as it is very helpful and informative. 
