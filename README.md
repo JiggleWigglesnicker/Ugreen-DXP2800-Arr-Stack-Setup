@@ -13,13 +13,14 @@ If you want to know how to set up the Arr stack in greater detail, I would recom
 ### Folder Types in UGOS Pro
 * **`arr-stack-data` (Shared Folder):** Must be created as a **Shared Folder** in **Control Panel > Shared Folder** (or **Files** app). This allows network access and root path mapping across containers.
 * **Subfolders & Docker Config Folder:** Created as standard subfolders inside `arr-stack-data` or under the default `docker` shared folder.
+  !!Note: `docker` folder should automatically be created when installing Docker from the Ugreen Nas App Center.!!
 
 ### Required Directory Structure
 Create your subfolders exactly according to this hierarchy:
 
 ```text
 /volume1/
-├── docker/
+├── docker/                       <----- should automatically be created when installing Docker from the Ugreen Nas App Center
 │   └── arr-stack/                <-- Stores .env and docker-compose.yaml
 │       ├── gluetun/             <-- App configs / data directory
 │       ├── sabnzbd/             <-- App configs
@@ -229,7 +230,8 @@ services:
 ```
 ## Understanding Container Path Mapping (`/data`)
 
-In the `docker-compose.yaml` file, the host's `arr-stack-data` folder (`${DOCKERSTORAGEDIR}`) is mapped directly inside the containers under the root path `/data`. This unified internal path structure is essential for the Arr stack:   
+In the `docker-compose.yaml` file, the host's `arr-stack-data` folder (`${DOCKERSTORAGEDIR}`) is mapped directly inside the containers under the root path `/data`. 
+This unified internal path structure is essential for the Arr stack:   
 
 * **Radarr & Sonarr** mount the entire shared folder as `${DOCKERSTORAGEDIR}:/data`, giving them unified access to both downloads and media libraries.   
 * **Jellyfin & Bazarr** mount the media directory as `${DOCKERSTORAGEDIR}/media:/data/media` to read your video libraries and subtitles.   
@@ -291,7 +293,10 @@ To ensure SABnzbd and Gluetun are properly protected through your VPN:
 3. Access container shell for maintenance if needed:
    ```bash
    sudo docker exec -it sabnzbd /bin/bash
+   wget -qO - icanhazip.com
+   exit
    ```
+   *(The IP inside Sabnzbd must differ from your host NAS IP address and be the same as the Gluetun IP address).*
 
 # Jellyfin Intel QuickSync (QSV) Transcoding Configuration Guide
 
